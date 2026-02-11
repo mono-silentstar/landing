@@ -1160,6 +1160,8 @@ html.dark .ambient-glow::after {
 
 @media (max-width: 768px) {
     :root {
+        --page-width: calc((90vw - var(--spine-width) - var(--leather-border) * 2) / 2);
+        --page-height: auto;
         --page-padding: 24px;
     }
 
@@ -1167,10 +1169,8 @@ html.dark .ambient-glow::after {
         max-width: 90vw;
     }
 
-    .book__page {
-        width: calc((90vw - var(--spine-width) - var(--leather-border) * 2) / 2);
-        height: auto;
-        min-height: 350px;
+    .book__page,
+    .phantom-page {
         aspect-ratio: 3 / 4;
     }
 
@@ -1189,6 +1189,8 @@ html.dark .ambient-glow::after {
         --book-angle: 25deg;
         --spine-width: 16px;
         --leather-border: 6px;
+        --page-width: calc((96vw - var(--spine-width) - var(--leather-border) * 2) / 2);
+        --page-height: auto;
         --page-padding: 12px;
         --gold-inset: 3px;
         --corner-size: 8px;
@@ -1200,35 +1202,7 @@ html.dark .ambient-glow::after {
     }
 
     .book__page {
-        width: calc((96vw - var(--spine-width) - var(--leather-border) * 2) / 2);
-        min-height: auto;
-    }
-
-    .page-title {
-        font-size: 0.85rem;
-        margin-bottom: 0.3em;
-    }
-
-    .page-subtitle {
-        font-size: 0.7rem;
-    }
-
-    .page-content p,
-    .page-content li {
-        font-size: 0.65rem;
-        line-height: 1.4;
-    }
-
-    .page-content em {
-        font-size: 0.6rem;
-    }
-
-    .bookplate__name {
-        font-size: 1.4rem;
-    }
-
-    .bookplate__label {
-        font-size: 0.55rem;
+        font-size: 9px;
     }
 
     .bookplate {
@@ -1236,55 +1210,26 @@ html.dark .ambient-glow::after {
         max-width: 140px;
     }
 
-    .toc__title {
-        font-size: 0.7rem;
+    .bookplate__name {
+        font-size: 2.5em;
     }
 
-    .toc__number {
-        font-size: 0.6rem;
-    }
-
-    .toc__link {
-        padding: 0.3em 0;
-    }
-
-    .gold-rule {
-        margin: 0.5em auto;
-    }
-
-    .cv-entry {
-        margin-bottom: 0.5em;
-    }
-
-    .cv-entry__title {
-        font-size: 0.7rem;
-    }
-
-    .cv-entry__company,
-    .cv-entry__date {
-        font-size: 0.55rem;
-    }
-
-    .cv-entry__desc {
-        font-size: 0.6rem;
-    }
-
-    .skill-list li {
-        padding: 0.1em 0;
-        font-size: 0.6rem;
-    }
-
-    .diss-title {
-        font-size: 0.75rem;
-    }
-
-    .diss-meta {
-        font-size: 0.55rem;
-    }
-
-    .findings-list li {
-        padding: 0.2em 0;
-    }
+    /* Override rem-based sizes inside book pages to use the page font-size */
+    .page-title { font-size: 1.6em; }
+    .page-subtitle { font-size: 1.1em; }
+    .page-content p,
+    .page-content li { font-size: 1em; line-height: 1.4; }
+    .page-content em { font-size: 0.9em; }
+    .cv-entry__title { font-size: 1.05em; }
+    .cv-entry__company { font-size: 0.85em; }
+    .cv-entry__date { font-size: 0.8em; }
+    .cv-entry__desc { font-size: 0.9em; }
+    .diss-title { font-size: 1.1em; }
+    .diss-meta { font-size: 0.85em; }
+    .toc__title { font-size: 1em; }
+    .toc__number { font-size: 0.9em; }
+    .bookplate__label { font-size: 0.75em; }
+    .skill-list li { font-size: 0.9em; }
 
     /* Detail view */
     .detail__page {
