@@ -37,6 +37,7 @@ img { max-width: 100%; display: block; }
     margin: -1px;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
     white-space: nowrap;
     border: 0;
 }
@@ -518,11 +519,6 @@ body {
 .toc {
     display: flex;
     flex-direction: column;
-    gap: 0;
-}
-
-.toc__entry {
-    border-bottom: none;
 }
 
 .toc__link {
@@ -971,14 +967,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   19. PAGE LOAD ANIMATION
-   ========================================================================== */
-
-/* Book starts hidden, .book--loaded class triggers fade-in (added by JS) */
-
-
-/* ==========================================================================
-   20. HOVER STATES
+   19. HOVER STATES
    ========================================================================== */
 
 /* Zoomable spread content */
@@ -991,18 +980,36 @@ html.dark .theme-toggle__icon--moon {
     filter: brightness(1.03);
 }
 
-/* Non-zoomable cover content */
-.page-content[data-spread="cover"] {
-    cursor: default;
+.toc__link:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
 }
 
-.page-content[data-spread="cover"]:hover {
-    filter: none;
+.spread-dot:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 50%;
+}
+
+.detail__back:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.turn-zone:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
 }
 
 
 /* ==========================================================================
-   21. INTERACTION HINT
+   20. INTERACTION HINT
    ========================================================================== */
 
 .hint {
@@ -1024,7 +1031,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   22. HINTING PULSE (turn zones + zoomable content)
+   21. HINTING PULSE (turn zones + zoomable content)
    ========================================================================== */
 
 .book--hinting .turn-zone::after {
@@ -1047,7 +1054,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   23. AMBIENT GLOW
+   22. AMBIENT GLOW
    ========================================================================== */
 
 .ambient-glow {
@@ -1108,7 +1115,7 @@ html.dark .ambient-glow::after {
 
 
 /* ==========================================================================
-   24. AMBIENT CANVAS (particles)
+   23. AMBIENT CANVAS (particles)
    ========================================================================== */
 
 #ambient-canvas {
@@ -1120,7 +1127,7 @@ html.dark .ambient-glow::after {
 
 
 /* ==========================================================================
-   25. REDUCED MOTION
+   24. REDUCED MOTION
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1132,7 +1139,7 @@ html.dark .ambient-glow::after {
 
 
 /* ==========================================================================
-   26. NO-JS DARK MODE FALLBACK
+   25. NO-JS DARK MODE FALLBACK
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
@@ -1155,7 +1162,7 @@ html.dark .ambient-glow::after {
 
 
 /* ==========================================================================
-   27. TABLET (481px – 768px)
+   26. TABLET (481px – 768px)
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -1181,7 +1188,7 @@ html.dark .ambient-glow::after {
 
 
 /* ==========================================================================
-   28. MOBILE (≤480px) — Scaled-down book
+   27. MOBILE (≤480px) — Scaled-down book
    ========================================================================== */
 
 @media (max-width: 480px) {

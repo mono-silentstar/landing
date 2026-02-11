@@ -9,10 +9,9 @@
 
     var CONFIG = {
         spreads: ['cover', 'about', 'cv', 'diss'],
-        detailSpreads: { 1: 'about', 2: 'cv', 3: 'diss' },
-        detailToSpread: { 'about': 1, 'cv': 2, 'diss': 3 },
         turnDuration: 500,
         zoomDuration: 550,
+        zoomOutDuration: 450,
         parallaxX: 4,
         parallaxY: 3,
         parallaxAngle: 1.5,
@@ -99,7 +98,8 @@
        =========================== */
 
     function initTheme() {
-        var saved = localStorage.getItem('theme');
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
         if (saved) {
             applyTheme(saved === 'dark');
         } else {
@@ -119,7 +119,7 @@
     function applyTheme(dark) {
         els.html.classList.toggle('dark', dark);
         els.toggle.setAttribute('aria-checked', String(dark));
-        localStorage.setItem('theme', dark ? 'dark' : 'light');
+        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
         if (window.ambientParticles) window.ambientParticles.setTheme(dark);
     }
 
@@ -276,9 +276,6 @@
         if (state.isAnimating) return;
         state.isAnimating = true;
 
-        // Fix from plan: start fetch immediately, fade content to opacity 0,
-        // swap while invisible, fade back to 1 at animation end.
-
         var fetchDone = false;
 
         // Start fetch immediately
@@ -290,10 +287,10 @@
         els.spread.classList.add('book__spread--fading');
 
         if (state.reducedMotion) {
-            // Instant swap — no animation
-            // Wait a tick for the fetch
+            var elapsed = 0;
             var check = setInterval(function() {
-                if (fetchDone) {
+                elapsed += 10;
+                if (fetchDone || elapsed > 3000) {
                     clearInterval(check);
                     els.spread.classList.remove('book__spread--fading');
                     state.isAnimating = false;
@@ -343,6 +340,9 @@
             swap: 'innerHTML',
         }).then(function() {
             if (callback) callback();
+        }).catch(function() {
+            state.isAnimating = false;
+            els.spread.classList.remove('book__spread--fading');
         });
     }
 
@@ -361,6 +361,8 @@
         htmx.ajax('GET', BASE + detailUrl, {
             target: '#detail-content',
             swap: 'innerHTML',
+        }).catch(function() {
+            state.isAnimating = false;
         });
 
         if (state.reducedMotion) {
@@ -370,6 +372,8 @@
             els.detail.setAttribute('aria-hidden', 'false');
             state.isDetailView = true;
             state.isAnimating = false;
+
+            if (els.detailBack) els.detailBack.focus();
 
             history.pushState(
                 { view: 'detail', spread: state.currentSpread, section: sectionName },
@@ -389,6 +393,9 @@
             els.detail.setAttribute('aria-hidden', 'false');
             state.isDetailView = true;
             state.isAnimating = false;
+
+            // Move focus to back button for keyboard/screen reader users
+            if (els.detailBack) els.detailBack.focus();
 
             // Update URL
             var urlPath = sectionName === 'diss' ? 'dissertation' : sectionName;
@@ -411,6 +418,7 @@
             els.detail.setAttribute('aria-hidden', 'true');
             state.isDetailView = false;
             state.isAnimating = false;
+            if (els.book) els.book.focus();
             history.pushState({ view: 'book', spread: state.currentSpread }, '', BASE + '/');
             return;
         }
@@ -426,9 +434,10 @@
             els.detail.setAttribute('aria-hidden', 'true');
             state.isDetailView = false;
             state.isAnimating = false;
+            if (els.book) els.book.focus();
 
             history.pushState({ view: 'book', spread: state.currentSpread }, '', BASE + '/');
-        }, 450); // matches zoom-out duration
+        }, CONFIG.zoomOutDuration);
     }
 
     /* ===========================
@@ -436,6 +445,7 @@
        =========================== */
 
     function onPopState(e) {
+        if (state.isAnimating) return;
         var popState = e.state;
 
         if (!popState) {
@@ -548,7 +558,9 @@
         if (!els.hint || !els.book) return;
 
         // Already seen this session — hide immediately
-        if (sessionStorage.getItem('hintSeen')) {
+        var hintSeen = false;
+        try { hintSeen = sessionStorage.getItem('hintSeen'); } catch (e) {}
+        if (hintSeen) {
             els.hint.classList.add('hint--hidden');
             return;
         }
@@ -561,7 +573,7 @@
         if (!els.hint || els.hint.classList.contains('hint--hidden')) return;
         els.hint.classList.add('hint--hidden');
         if (els.book) els.book.classList.remove('book--hinting');
-        sessionStorage.setItem('hintSeen', '1');
+        try { sessionStorage.setItem('hintSeen', '1'); } catch (e) {}
     }
 
     /* ===========================

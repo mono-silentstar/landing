@@ -17,6 +17,12 @@ $isHtmx = isset($_SERVER['HTTP_HX_REQUEST']);
 if ($isHtmx && preg_match('#^/(spread|detail)/(\w+)$#', $uri, $m)) {
     $type = $m[1] === 'spread' ? 'spreads' : 'details';
     $name = $m[2];
+    $allowed = ['cover', 'about', 'cv', 'diss'];
+    if (!in_array($name, $allowed, true)) {
+        http_response_code(404);
+        echo 'Not found';
+        exit;
+    }
     $file = __DIR__ . "/partials/{$type}/{$name}.php";
     if (file_exists($file)) {
         include $file;
@@ -147,7 +153,7 @@ $initialSpreadIndex = $route['spreadIndex'] ?? 0;
     <script>
         window.__INITIAL_STATE__ = {
             view: '<?= $view ?>',
-            section: <?= $initialDetail ? "'" . $initialDetail . "'" : 'null' ?>,
+            section: <?= json_encode($initialDetail) ?>,
             spreadIndex: <?= $initialSpreadIndex ?>,
             basePath: '<?= $basePath ?>'
         };

@@ -30,7 +30,6 @@
     /* --- Dark mode: fireflies --- */
     var FIREFLY_COUNT = 25;
     var FIREFLY_INNER = '#ffd25a';
-    var FIREFLY_OUTER = '#ffc33c';
 
     /* ===========================
        STATE
@@ -38,6 +37,7 @@
 
     var canvas, ctx;
     var particles = [];
+    var gradCache = {};
     var animId = null;
     var isDark = false;
     var dpr = 1;
@@ -254,7 +254,15 @@
             ctx.save();
             ctx.rotate((Math.PI * 2 / count) * i);
             ctx.beginPath();
-            ctx.ellipse(0, -s * 0.4, s * 0.35, s * 0.7, 0, 0, Math.PI * 2);
+            if (ctx.ellipse) {
+                ctx.ellipse(0, -s * 0.4, s * 0.35, s * 0.7, 0, 0, Math.PI * 2);
+            } else {
+                ctx.save();
+                ctx.translate(0, -s * 0.4);
+                ctx.scale(s * 0.35, s * 0.7);
+                ctx.arc(0, 0, 1, 0, Math.PI * 2);
+                ctx.restore();
+            }
             ctx.fill();
             ctx.restore();
         }
@@ -282,19 +290,25 @@
 
     function drawFirefly(p) {
         var s = p.size;
-        var grad = ctx.createRadialGradient(0, 0, 0, 0, 0, s);
-        grad.addColorStop(0, FIREFLY_INNER);
-        grad.addColorStop(1, 'rgba(255,210,90,0)');
-        ctx.fillStyle = grad;
+        var key = s.toFixed(1);
+
+        if (!gradCache[key]) {
+            var g1 = ctx.createRadialGradient(0, 0, 0, 0, 0, s);
+            g1.addColorStop(0, FIREFLY_INNER);
+            g1.addColorStop(1, 'rgba(255,210,90,0)');
+            var g2 = ctx.createRadialGradient(0, 0, s * 0.5, 0, 0, s * 3);
+            g2.addColorStop(0, 'rgba(255,195,60,0.15)');
+            g2.addColorStop(1, 'rgba(255,195,60,0)');
+            gradCache[key] = [g1, g2];
+        }
+
+        var grads = gradCache[key];
+        ctx.fillStyle = grads[0];
         ctx.beginPath();
         ctx.arc(0, 0, s, 0, Math.PI * 2);
         ctx.fill();
 
-        // Outer glow
-        var grad2 = ctx.createRadialGradient(0, 0, s * 0.5, 0, 0, s * 3);
-        grad2.addColorStop(0, 'rgba(255,195,60,0.15)');
-        grad2.addColorStop(1, 'rgba(255,195,60,0)');
-        ctx.fillStyle = grad2;
+        ctx.fillStyle = grads[1];
         ctx.beginPath();
         ctx.arc(0, 0, s * 3, 0, Math.PI * 2);
         ctx.fill();
@@ -333,6 +347,7 @@
         canvas.style.width = W + 'px';
         canvas.style.height = H + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        gradCache = {};
     }
 
     function onResize() {
@@ -346,13 +361,11 @@
 
     function setTheme(dark) {
         isDark = dark;
+        if (!ctx) return;
 
         // Stagger fade-out of existing particles
         for (var i = 0; i < particles.length; i++) {
             if (particles[i].fadeOut === 0) {
-                particles[i].fadeOut = 1;
-                // Stagger start by randomizing fadeOut slightly above 1
-                // so they don't all disappear at once
                 particles[i].fadeOut = 1 + (Math.random() * STAGGER_MAX * FADE_OUT_RATE);
             }
         }
@@ -374,6 +387,7 @@
         if (!canvas) return;
 
         ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
         // Check reduced motion
         var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
