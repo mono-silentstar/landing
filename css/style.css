@@ -1,0 +1,1226 @@
+/* ==========================================================================
+   1. RESET & BASE
+   ========================================================================== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Lora', Georgia, 'Times New Roman', serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+ul { list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { border: none; background: none; cursor: pointer; font: inherit; }
+hr { border: none; }
+img { max-width: 100%; display: block; }
+
+/* Screen-reader only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sr-only--focusable:focus {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: auto;
+    height: auto;
+    padding: 8px 16px;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background: var(--page);
+    color: var(--text-title);
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    z-index: 200;
+    font-size: 0.875rem;
+}
+
+
+/* ==========================================================================
+   2. CUSTOM PROPERTIES
+   ========================================================================== */
+
+:root {
+    /* --- Colors (Light Mode — Golden Hour) --- */
+    --bg:            #c4a882;
+    --bg-center:     #d4b892;
+    --page:          #f5ecd7;
+    --leather:       #5c3a21;
+    --gold:          #b8960c;
+    --spine:         #4a2e18;
+    --text-title:    #2c1810;
+    --text-body:     #3d2b1f;
+    --text-subtle:   #6b5344;
+    --shadow-page:   rgba(60, 30, 10, 0.15);
+    --shadow-desk:   rgba(40, 20, 5, 0.3);
+    --text-glow:     none;
+    --toggle-bg:     rgba(0, 0, 0, 0.1);
+
+    /* --- Dimensions --- */
+    --page-width:    370px;
+    --page-height:   500px;
+    --spine-width:   40px;
+    --leather-border: 12px;
+    --page-padding:  32px;
+    --turn-zone-width: 40px;
+    --gold-inset:    4px;
+    --corner-size:   16px;
+    --dot-size:      6px;
+    --dot-gap:       12px;
+
+    /* --- Perspective --- */
+    --perspective:   1200px;
+    --book-angle:    45deg;
+    --persp-origin-y: 40%;
+
+    /* --- Animation --- */
+    --turn-speed:    0.5s;
+    --zoom-speed:    0.55s;
+    --theme-speed:   0.8s;
+    --parallax-smooth: 0.3s;
+    --hover-speed:   0.2s;
+}
+
+html.dark {
+    --bg:            #1a1a2e;
+    --bg-center:     #222240;
+    --page:          #2a2a3a;
+    --leather:       #3a2518;
+    --gold:          #d4b856;
+    --spine:         #2a1a10;
+    --text-title:    #e8e0cc;
+    --text-body:     #c8c0b0;
+    --text-subtle:   #8a8278;
+    --shadow-page:   rgba(0, 0, 20, 0.3);
+    --shadow-desk:   rgba(0, 0, 10, 0.5);
+    --text-glow:     0 0 8px rgba(232, 224, 204, 0.3);
+    --toggle-bg:     rgba(255, 255, 255, 0.1);
+}
+
+
+/* ==========================================================================
+   3. TYPOGRAPHY
+   ========================================================================== */
+
+.page-title,
+.bookplate__name,
+.detail__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+}
+
+.page-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5em;
+}
+
+.page-subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+    margin-bottom: 0.4em;
+}
+
+.page-content p,
+.page-content li {
+    color: var(--text-body);
+    font-size: 1rem;
+    line-height: 1.65;
+}
+
+.page-content em {
+    color: var(--text-subtle);
+    font-size: 0.875rem;
+}
+
+
+/* ==========================================================================
+   4. BODY / DESK SURFACE
+   ========================================================================== */
+
+body {
+    background: radial-gradient(ellipse at center 45%, var(--bg-center), var(--bg) 70%);
+    color: var(--text-body);
+    transition:
+        background var(--theme-speed) ease,
+        color var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   5. SCENE (Perspective container)
+   ========================================================================== */
+
+.scene {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 10vh;
+    perspective: var(--perspective);
+    perspective-origin: center var(--persp-origin-y);
+}
+
+/* Book shadow on desk */
+.scene::after {
+    content: '';
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 700px;
+    height: 60px;
+    background: var(--shadow-desk);
+    border-radius: 50%;
+    filter: blur(30px);
+    z-index: 1;
+    pointer-events: none;
+    transition: background var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   6. BOOK COVER (Leather frame)
+   ========================================================================== */
+
+.book {
+    transform: rotateX(var(--book-angle));
+    transform-style: preserve-3d;
+    transition: transform var(--parallax-smooth) ease-out;
+    z-index: 10;
+    /* Page load animation — starts hidden */
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.book--loaded {
+    opacity: 1;
+    transition:
+        transform var(--parallax-smooth) ease-out,
+        opacity 0.7s ease-out;
+}
+
+.book__cover {
+    position: relative;
+    display: flex;
+    padding: var(--leather-border);
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--leather), white 5%) 0%,
+        var(--leather) 50%,
+        color-mix(in srgb, var(--leather), black 8%) 100%
+    );
+    border-radius: 4px;
+    transform-style: preserve-3d;
+    transition: background var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   7. BOOK SPINE
+   ========================================================================== */
+
+.book__spine {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateZ(2px);
+    width: var(--spine-width);
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--spine), black 10%) 0%,
+        var(--spine) 40%,
+        color-mix(in srgb, var(--spine), white 5%) 50%,
+        var(--spine) 60%,
+        color-mix(in srgb, var(--spine), black 10%) 100%
+    );
+    z-index: 11;
+    pointer-events: none;
+    transition: background var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   8. BOOK PAGES
+   ========================================================================== */
+
+.book__spread {
+    display: flex;
+    gap: var(--spine-width);
+    transition: opacity 0.25s ease;
+}
+
+.book__page {
+    position: relative;
+    width: var(--page-width);
+    height: var(--page-height);
+    background: var(--page);
+    overflow: hidden;
+    transition:
+        background var(--theme-speed) ease,
+        box-shadow var(--theme-speed) ease;
+}
+
+.book__page--left {
+    box-shadow: inset -4px 0 8px var(--shadow-page);
+    border-radius: 0;
+}
+
+.book__page--right {
+    box-shadow: inset 4px 0 8px var(--shadow-page);
+    border-radius: 0;
+}
+
+
+/* ==========================================================================
+   9. GOLD DETAILS
+   ========================================================================== */
+
+/* Inset border on each page */
+.book__page::before {
+    content: '';
+    position: absolute;
+    inset: var(--gold-inset);
+    border: 1px solid var(--gold);
+    pointer-events: none;
+    z-index: 2;
+    transition: border-color var(--theme-speed) ease;
+}
+
+/* Gold corner marks — top-left and bottom-right per page */
+.page-content {
+    position: relative;
+}
+
+.page-content::before,
+.page-content::after {
+    content: '';
+    position: absolute;
+    width: var(--corner-size);
+    height: var(--corner-size);
+    border-color: var(--gold);
+    border-style: solid;
+    border-width: 0;
+    pointer-events: none;
+    z-index: 3;
+    transition: border-color var(--theme-speed) ease;
+}
+
+/* Top-left corner */
+.page-content::before {
+    top: 0;
+    left: 0;
+    border-top-width: 1px;
+    border-left-width: 1px;
+}
+
+/* Bottom-right corner */
+.page-content::after {
+    bottom: 0;
+    right: 0;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+}
+
+/* Gold rule */
+.gold-rule {
+    width: 60%;
+    max-width: 200px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1em auto;
+    transition: background var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   10. PAGE CONTENT TYPOGRAPHY
+   ========================================================================== */
+
+.page-content {
+    padding: var(--page-padding);
+    height: 100%;
+}
+
+.page-content p {
+    margin-bottom: 0.75em;
+}
+
+.page-content p:last-child {
+    margin-bottom: 0;
+}
+
+.skill-list {
+    margin-top: 0.5em;
+}
+
+.skill-list li {
+    padding: 0.25em 0;
+    border-bottom: 1px dotted color-mix(in srgb, var(--gold), transparent 60%);
+}
+
+.skill-list li:last-child {
+    border-bottom: none;
+}
+
+.skill-list--compact li {
+    padding: 0.15em 0;
+    font-size: 0.925rem;
+}
+
+/* CV entries */
+.cv-entry {
+    margin-bottom: 1em;
+}
+
+.cv-entry__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+}
+
+.cv-entry__company {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-subtle);
+}
+
+.cv-entry__date {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gold);
+    margin-bottom: 0.25em;
+}
+
+.cv-entry__desc {
+    font-size: 0.925rem;
+}
+
+/* Dissertation entries */
+.diss-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+    margin-bottom: 0.3em;
+    line-height: 1.4;
+}
+
+.diss-meta {
+    font-size: 0.85rem;
+    color: var(--text-subtle);
+    margin-bottom: 0.75em;
+}
+
+.diss-cta {
+    font-size: 0.9rem;
+    color: var(--text-subtle);
+    text-align: center;
+}
+
+.findings-list li {
+    padding: 0.4em 0;
+    border-bottom: 1px dotted color-mix(in srgb, var(--gold), transparent 60%);
+}
+
+.findings-list li:last-child {
+    border-bottom: none;
+}
+
+
+/* ==========================================================================
+   11. BOOKPLATE
+   ========================================================================== */
+
+.page-content--bookplate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bookplate {
+    text-align: center;
+    padding: 2em;
+    border: 1px solid var(--gold);
+    max-width: 250px;
+    transition: border-color var(--theme-speed) ease;
+}
+
+.bookplate__label {
+    display: block;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 0.5em;
+    transition: color var(--theme-speed) ease;
+}
+
+.bookplate__name {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 0.3em;
+}
+
+.bookplate .gold-rule {
+    margin: 0.5em auto 0;
+}
+
+
+/* ==========================================================================
+   12. TABLE OF CONTENTS
+   ========================================================================== */
+
+.page-content--toc {
+    padding-top: 48px;
+}
+
+.page-content--toc .page-title {
+    margin-bottom: 1.5em;
+}
+
+.toc {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.toc__entry {
+    border-bottom: none;
+}
+
+.toc__link {
+    display: flex;
+    align-items: baseline;
+    padding: 0.6em 0;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: color var(--hover-speed) ease;
+    cursor: pointer;
+}
+
+.toc__link:hover {
+    color: var(--gold);
+}
+
+.toc__title {
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.toc__dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--text-subtle);
+    margin: 0 0.5em;
+    min-width: 20px;
+    align-self: baseline;
+    transform: translateY(-0.2em);
+    transition: border-color var(--theme-speed) ease;
+}
+
+.toc__number {
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    color: var(--text-subtle);
+    font-style: italic;
+    transition: color var(--theme-speed) ease;
+}
+
+
+/* ==========================================================================
+   13. TURN ZONES
+   ========================================================================== */
+
+.turn-zone {
+    position: absolute;
+    top: 0;
+    width: var(--turn-zone-width);
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--hover-speed) ease;
+}
+
+.turn-zone--prev {
+    left: 0;
+    cursor: w-resize;
+}
+
+.turn-zone--next {
+    right: 0;
+    cursor: e-resize;
+}
+
+.turn-zone:hover {
+    opacity: 1;
+}
+
+/* Arrow indicator */
+.turn-zone::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-style: solid;
+    border-color: var(--gold);
+    border-width: 0;
+    opacity: 0.6;
+}
+
+.turn-zone--prev::after {
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    transform: rotate(45deg);
+}
+
+.turn-zone--next::after {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    transform: rotate(45deg);
+}
+
+/* Hide at boundaries */
+.turn-zone--hidden {
+    display: none;
+}
+
+
+/* ==========================================================================
+   14. POSITION DOTS
+   ========================================================================== */
+
+.spread-dots {
+    display: flex;
+    gap: var(--dot-gap);
+    justify-content: center;
+    margin-top: 2em;
+    z-index: 20;
+}
+
+.spread-dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition:
+        background var(--hover-speed) ease,
+        transform var(--hover-speed) ease,
+        border-color var(--theme-speed) ease;
+}
+
+.spread-dot:hover {
+    transform: scale(1.4);
+}
+
+.spread-dot--active {
+    background: var(--gold);
+}
+
+
+/* ==========================================================================
+   15. DETAIL VIEW
+   ========================================================================== */
+
+.detail {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    overflow-y: auto;
+    background: var(--bg);
+    transform: translateY(20px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        background var(--theme-speed) ease;
+}
+
+.detail--active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.detail__back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 0.9rem;
+    color: var(--gold);
+    z-index: 51;
+    transition: color var(--hover-speed) ease;
+}
+
+.detail__back:hover {
+    text-decoration: underline;
+}
+
+.detail__page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 48px 64px;
+    background: var(--page);
+    min-height: 100vh;
+    position: relative;
+    transition:
+        background var(--theme-speed) ease,
+        box-shadow var(--theme-speed) ease;
+}
+
+/* Gold inset border on detail page */
+.detail__page::before {
+    content: '';
+    position: absolute;
+    inset: var(--gold-inset);
+    border: 1px solid var(--gold);
+    pointer-events: none;
+    transition: border-color var(--theme-speed) ease;
+}
+
+.detail__content {
+    position: relative;
+}
+
+.detail__title {
+    font-size: 2rem;
+    margin-bottom: 0.5em;
+}
+
+.detail__content h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+    margin: 1.5em 0 0.5em;
+}
+
+.detail__content h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-title);
+    text-shadow: var(--text-glow);
+    margin: 1.2em 0 0.3em;
+}
+
+.detail__content p {
+    color: var(--text-body);
+    margin-bottom: 0.75em;
+    line-height: 1.7;
+}
+
+.detail__content ul {
+    margin: 0.5em 0 1em 1.5em;
+    list-style: disc;
+}
+
+.detail__content li {
+    color: var(--text-body);
+    margin-bottom: 0.4em;
+    line-height: 1.6;
+}
+
+.detail__content em {
+    color: var(--text-subtle);
+}
+
+.detail__content .gold-rule {
+    margin: 2em auto;
+}
+
+/* Detail CV entries */
+.detail-cv-entry {
+    margin-bottom: 1.5em;
+}
+
+.detail-cv-meta {
+    font-size: 0.9rem;
+    color: var(--text-subtle);
+    margin-bottom: 0.5em;
+}
+
+
+/* ==========================================================================
+   16. THEME TOGGLE
+   ========================================================================== */
+
+.theme-toggle {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--toggle-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition:
+        background var(--theme-speed) ease,
+        transform var(--hover-speed) ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.18);
+}
+
+html.dark .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.theme-toggle__icon {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    transition:
+        opacity 0.5s ease-in-out,
+        transform 0.5s ease-in-out;
+}
+
+.theme-toggle__icon svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--text-title);
+    color: var(--text-title);
+    transition:
+        fill var(--theme-speed) ease,
+        color var(--theme-speed) ease;
+}
+
+/* Sun visible in light mode */
+.theme-toggle__icon--sun {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.theme-toggle__icon--moon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+/* Dark mode: hide sun, show moon */
+html.dark .theme-toggle__icon--sun {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+html.dark .theme-toggle__icon--moon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+
+/* ==========================================================================
+   17. PAGE TURN ANIMATION
+   ========================================================================== */
+
+.phantom-page {
+    position: absolute;
+    top: var(--leather-border);
+    width: var(--page-width);
+    height: var(--page-height);
+    background: var(--page);
+    backface-visibility: hidden;
+    z-index: 15;
+    pointer-events: none;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow-page);
+    transition: background var(--theme-speed) ease;
+}
+
+.phantom-page--forward {
+    right: var(--leather-border);
+    transform-origin: left center;
+}
+
+.phantom-page--backward {
+    left: var(--leather-border);
+    transform-origin: right center;
+}
+
+.phantom-page--animating.phantom-page--forward {
+    animation: page-turn-forward var(--turn-speed) ease-in-out forwards;
+}
+
+.phantom-page--animating.phantom-page--backward {
+    animation: page-turn-backward var(--turn-speed) ease-in-out forwards;
+}
+
+@keyframes page-turn-forward {
+    0%   { transform: rotateY(0deg)    translateZ(0);    }
+    15%  { transform: rotateY(0deg)    translateZ(10px); }
+    85%  { transform: rotateY(-180deg) translateZ(10px); }
+    100% { transform: rotateY(-180deg) translateZ(0);    }
+}
+
+@keyframes page-turn-backward {
+    0%   { transform: rotateY(0deg)   translateZ(0);    }
+    15%  { transform: rotateY(0deg)   translateZ(10px); }
+    85%  { transform: rotateY(180deg) translateZ(10px); }
+    100% { transform: rotateY(180deg) translateZ(0);    }
+}
+
+/* Spread fade during turn */
+.book__spread--fading {
+    opacity: 0;
+}
+
+
+/* ==========================================================================
+   18. ZOOM ANIMATION
+   ========================================================================== */
+
+.scene--zooming-in .book {
+    animation: zoom-in var(--zoom-speed) ease-out forwards;
+}
+
+.scene--zooming-out .book {
+    animation: zoom-out 0.45s ease-in forwards;
+}
+
+@keyframes zoom-in {
+    0% {
+        transform: rotateX(var(--book-angle)) scale(1);
+        opacity: 1;
+    }
+    70% {
+        transform: rotateX(5deg) scale(1.4);
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(0deg) scale(1.5);
+        opacity: 0;
+    }
+}
+
+@keyframes zoom-out {
+    0% {
+        transform: rotateX(0deg) scale(1.5);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(var(--book-angle)) scale(1);
+        opacity: 1;
+    }
+}
+
+.scene--detail-active .book {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scene--detail-active .spread-dots {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scene--detail-active ~ .detail {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   19. PAGE LOAD ANIMATION
+   ========================================================================== */
+
+/* Book starts hidden, .book--loaded class triggers fade-in (added by JS) */
+
+
+/* ==========================================================================
+   20. HOVER STATES
+   ========================================================================== */
+
+/* Zoomable spread content */
+.page-content[data-detail] {
+    cursor: zoom-in;
+    transition: filter var(--hover-speed) ease;
+}
+
+.page-content[data-detail]:hover {
+    filter: brightness(1.03);
+}
+
+/* Non-zoomable cover content */
+.page-content[data-spread="cover"] {
+    cursor: default;
+}
+
+.page-content[data-spread="cover"]:hover {
+    filter: none;
+}
+
+
+/* ==========================================================================
+   21. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01s !important;
+        transition-duration: 0.01s !important;
+    }
+}
+
+
+/* ==========================================================================
+   22. NO-JS DARK MODE FALLBACK
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light-applied) {
+        --bg:            #1a1a2e;
+        --bg-center:     #222240;
+        --page:          #2a2a3a;
+        --leather:       #3a2518;
+        --gold:          #d4b856;
+        --spine:         #2a1a10;
+        --text-title:    #e8e0cc;
+        --text-body:     #c8c0b0;
+        --text-subtle:   #8a8278;
+        --shadow-page:   rgba(0, 0, 20, 0.3);
+        --shadow-desk:   rgba(0, 0, 10, 0.5);
+        --text-glow:     0 0 8px rgba(232, 224, 204, 0.3);
+        --toggle-bg:     rgba(255, 255, 255, 0.1);
+    }
+}
+
+
+/* ==========================================================================
+   23. TABLET (481px – 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    :root {
+        --page-padding: 24px;
+    }
+
+    .book__cover {
+        max-width: 90vw;
+    }
+
+    .book__page {
+        width: calc((90vw - var(--spine-width) - var(--leather-border) * 2) / 2);
+        height: auto;
+        min-height: 350px;
+        aspect-ratio: 3 / 4;
+    }
+
+    .detail__page {
+        padding: 80px 32px 48px;
+    }
+}
+
+
+/* ==========================================================================
+   24. MOBILE (≤480px) — Flipbook
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    :root {
+        --book-angle: 25deg;
+        --page-padding: 20px;
+    }
+
+    .scene {
+        padding-top: 5vh;
+    }
+
+    /* Hide spine */
+    .book__spine { display: none; }
+
+    /* Single page layout */
+    .book__spread {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .book__page {
+        width: 85vw;
+        max-width: 370px;
+        height: auto;
+        min-height: 400px;
+        aspect-ratio: auto;
+    }
+
+    /* On mobile, only show the active page */
+    .book__page { display: none; }
+    .book__page.mobile-active { display: block; }
+
+    /* Lighter appearance */
+    .book__cover {
+        padding: 4px;
+        border-radius: 2px;
+        background: var(--gold);
+    }
+
+    /* Turn zones become top/bottom */
+    .turn-zone {
+        width: 100%;
+        height: 40px;
+    }
+
+    .turn-zone--prev {
+        top: 0;
+        left: 0;
+        cursor: n-resize;
+    }
+
+    .turn-zone--next {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        cursor: s-resize;
+    }
+
+    /* Arrow indicators change to vertical */
+    .turn-zone--prev::after {
+        border-width: 0;
+        border-top-width: 2px;
+        border-left-width: 2px;
+        transform: rotate(45deg);
+    }
+
+    .turn-zone--next::after {
+        border-width: 0;
+        border-bottom-width: 2px;
+        border-right-width: 2px;
+        transform: rotate(45deg);
+    }
+
+    /* Mobile chevron affordances */
+    .mobile-chevron {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 12px;
+        z-index: 20;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .mobile-chevron--up {
+        top: -20px;
+    }
+
+    .mobile-chevron--down {
+        bottom: -20px;
+    }
+
+    .mobile-chevron svg {
+        fill: var(--gold);
+        opacity: 0.5;
+    }
+
+    .book:active .mobile-chevron {
+        opacity: 1;
+    }
+
+    /* Flipbook page turn (vertical) */
+    .phantom-page--forward {
+        right: auto;
+        left: 0;
+        top: 0;
+        transform-origin: bottom center;
+    }
+
+    .phantom-page--backward {
+        left: 0;
+        top: 0;
+        transform-origin: top center;
+    }
+
+    /* Detail view */
+    .detail__page {
+        padding: 60px 24px 32px;
+    }
+
+    .detail__back {
+        top: 16px;
+        left: 16px;
+        font-size: 0.85rem;
+    }
+
+    .detail__title {
+        font-size: 1.5rem;
+    }
+
+    /* Stacked pages for mobile */
+    .book__page.mobile-stacked {
+        display: block;
+        height: auto;
+        min-height: auto;
+    }
+
+    .book__page.mobile-stacked + .book__page.mobile-stacked {
+        border-top: 1px solid var(--gold);
+    }
+
+    /* Flipbook vertical keyframes */
+    @keyframes flip-up {
+        0%   { transform: rotateX(0deg)    translateZ(0);   }
+        15%  { transform: rotateX(0deg)    translateZ(8px); }
+        85%  { transform: rotateX(-180deg) translateZ(8px); }
+        100% { transform: rotateX(-180deg) translateZ(0);   }
+    }
+
+    @keyframes flip-down {
+        0%   { transform: rotateX(0deg)   translateZ(0);   }
+        15%  { transform: rotateX(0deg)   translateZ(8px); }
+        85%  { transform: rotateX(180deg) translateZ(8px); }
+        100% { transform: rotateX(180deg) translateZ(0);   }
+    }
+}
