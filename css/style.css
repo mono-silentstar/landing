@@ -1201,7 +1201,17 @@ html.dark .ambient-glow::after {
         max-width: 96vw;
     }
 
-    .book__page {
+    .scene {
+        justify-content: flex-start;
+        padding-top: 12vh;
+    }
+
+    .spread-dots {
+        margin-top: 4em;
+    }
+
+    .book__page,
+    .phantom-page {
         font-size: 9px;
     }
 
