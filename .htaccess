@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /
+RewriteBase /landing/
 
 # Serve existing files and directories directly
 RewriteCond %{REQUEST_FILENAME} -f [OR]

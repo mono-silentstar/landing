@@ -5,6 +5,8 @@
        CONFIGURATION
        =========================== */
 
+    var BASE = (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.basePath) || '';
+
     var CONFIG = {
         spreads: ['cover', 'about', 'cv', 'diss'],
         detailSpreads: { 1: 'about', 2: 'cv', 3: 'diss' },
@@ -238,7 +240,7 @@
 
             // If this was a direct URL load, navigate to / instead of animating
             if (!history.state || !history.state.view) {
-                window.location.href = '/';
+                window.location.href = BASE + '/';
                 return;
             }
             zoomOut();
@@ -353,7 +355,7 @@
     }
 
     function loadSpread(name, callback) {
-        htmx.ajax('GET', '/spread/' + name, {
+        htmx.ajax('GET', BASE + '/spread/' + name, {
             target: '#spread-content',
             swap: 'innerHTML',
         }).then(function() {
@@ -373,7 +375,7 @@
         var sectionName = detailUrl.replace('/detail/', '');
 
         // Fetch detail content immediately (in parallel with animation)
-        htmx.ajax('GET', detailUrl, {
+        htmx.ajax('GET', BASE + detailUrl, {
             target: '#detail-content',
             swap: 'innerHTML',
         });
@@ -389,7 +391,7 @@
             history.pushState(
                 { view: 'detail', spread: state.currentSpread, section: sectionName },
                 '',
-                '/' + (sectionName === 'diss' ? 'dissertation' : sectionName)
+                BASE + '/' + (sectionName === 'diss' ? 'dissertation' : sectionName)
             );
             return;
         }
@@ -410,7 +412,7 @@
             history.pushState(
                 { view: 'detail', spread: state.currentSpread, section: sectionName },
                 '',
-                '/' + urlPath
+                BASE + '/' + urlPath
             );
         }, CONFIG.zoomDuration);
     }
@@ -426,7 +428,7 @@
             els.detail.setAttribute('aria-hidden', 'true');
             state.isDetailView = false;
             state.isAnimating = false;
-            history.pushState({ view: 'book', spread: state.currentSpread }, '', '/');
+            history.pushState({ view: 'book', spread: state.currentSpread }, '', BASE + '/');
             return;
         }
 
@@ -442,7 +444,7 @@
             state.isDetailView = false;
             state.isAnimating = false;
 
-            history.pushState({ view: 'book', spread: state.currentSpread }, '', '/');
+            history.pushState({ view: 'book', spread: state.currentSpread }, '', BASE + '/');
         }, 450); // matches zoom-out duration
     }
 
@@ -481,7 +483,7 @@
         } else if (popState.view === 'detail' && !state.isDetailView) {
             // Going forward to detail
             if (popState.section) {
-                zoomIn('/detail/' + popState.section);
+                zoomIn('/detail/' + popState.section); // zoomIn prepends BASE internally
             }
         }
     }
@@ -602,7 +604,7 @@
                         e.preventDefault();
                         // If loaded directly, go home; otherwise zoom out
                         if (!history.state || !history.state.view) {
-                            window.location.href = '/';
+                            window.location.href = BASE + '/';
                         } else {
                             zoomOut();
                         }

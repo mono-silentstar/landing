@@ -1,7 +1,15 @@
 <?php
+$basePath = '/landing';
+
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = rtrim($uri, '/');
 if ($uri === '') $uri = '/';
+
+// Strip base path prefix so routes stay clean
+if ($basePath !== '' && strpos($uri, $basePath) === 0) {
+    $uri = substr($uri, strlen($basePath));
+    if ($uri === '' || $uri === false) $uri = '/';
+}
 
 $isHtmx = isset($_SERVER['HTTP_HX_REQUEST']);
 
@@ -49,7 +57,7 @@ $initialSpreadIndex = $route['spreadIndex'] ?? 0;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="<?= $basePath ?>/css/style.css">
     <script src="https://unpkg.com/htmx.org@2.0.4" defer></script>
     <noscript>
         <style>
@@ -117,7 +125,7 @@ $initialSpreadIndex = $route['spreadIndex'] ?? 0;
     <div class="detail <?= $view === 'detail' ? 'detail--active' : '' ?>"
          id="detail-view" role="main"
          aria-hidden="<?= $view === 'book' ? 'true' : 'false' ?>">
-        <a href="/" class="detail__back" id="detail-back">
+        <a href="<?= $basePath ?>/" class="detail__back" id="detail-back">
             &larr; Back to book
         </a>
         <div class="detail__page">
@@ -134,10 +142,11 @@ $initialSpreadIndex = $route['spreadIndex'] ?? 0;
         window.__INITIAL_STATE__ = {
             view: '<?= $view ?>',
             section: <?= $initialDetail ? "'" . $initialDetail . "'" : 'null' ?>,
-            spreadIndex: <?= $initialSpreadIndex ?>
+            spreadIndex: <?= $initialSpreadIndex ?>,
+            basePath: '<?= $basePath ?>'
         };
     </script>
 
-    <script src="/js/book.js"></script>
+    <script src="<?= $basePath ?>/js/book.js"></script>
 </body>
 </html>

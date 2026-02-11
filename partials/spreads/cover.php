@@ -12,21 +12,21 @@
         <h2 class="page-title">Contents</h2>
         <ul class="toc">
             <li class="toc__entry">
-                <a href="/about" class="toc__link" data-goto-spread="1">
+                <a href="<?= $basePath ?>/about" class="toc__link" data-goto-spread="1">
                     <span class="toc__title">About</span>
                     <span class="toc__dots"></span>
                     <span class="toc__number">I</span>
                 </a>
             </li>
             <li class="toc__entry">
-                <a href="/cv" class="toc__link" data-goto-spread="2">
+                <a href="<?= $basePath ?>/cv" class="toc__link" data-goto-spread="2">
                     <span class="toc__title">Curriculum Vitae</span>
                     <span class="toc__dots"></span>
                     <span class="toc__number">II</span>
                 </a>
             </li>
             <li class="toc__entry">
-                <a href="/dissertation" class="toc__link" data-goto-spread="3">
+                <a href="<?= $basePath ?>/dissertation" class="toc__link" data-goto-spread="3">
                     <span class="toc__title">Dissertation</span>
                     <span class="toc__dots"></span>
                     <span class="toc__number">III</span>
