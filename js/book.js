@@ -13,7 +13,6 @@
         detailToSpread: { 'about': 1, 'cv': 2, 'diss': 3 },
         turnDuration: 500,
         zoomDuration: 550,
-        swipeThreshold: 60,
         parallaxX: 4,
         parallaxY: 3,
         parallaxAngle: 1.5,
@@ -30,8 +29,6 @@
         isDetailView: false,
         reducedMotion: false,
         isTouchDevice: false,
-        isMobile: false,
-        mobilePageIndex: 0,
     };
 
     /* ===========================
@@ -68,8 +65,6 @@
         state.isTouchDevice = 'ontouchstart' in window
             || navigator.maxTouchPoints > 0;
 
-        state.isMobile = window.innerWidth <= 480;
-
         // Read initial state from PHP
         var initial = window.__INITIAL_STATE__ || {};
         if (initial.view === 'detail' && initial.section) {
@@ -87,10 +82,6 @@
         initParallax();
         initHint();
 
-        if (state.isMobile) {
-            initMobile();
-        }
-
         // Popstate handler for browser back/forward
         window.addEventListener('popstate', onPopState);
 
@@ -101,9 +92,6 @@
 
         // Mark JS as active for no-JS fallback
         els.html.classList.add('light-applied');
-
-        // Respond to resize for mobile detection
-        window.addEventListener('resize', onResize);
     }
 
     /* ===========================
@@ -550,110 +538,6 @@
                     break;
             }
         });
-    }
-
-    /* ===========================
-       MOBILE / FLIPBOOK
-       =========================== */
-
-    var MOBILE_PAGES = [
-        { spread: 'cover', side: 'left' },
-        { spread: 'cover', side: 'right' },
-        { spread: 'about', side: 'both' },
-        { spread: 'cv',    side: 'both' },
-        { spread: 'diss',  side: 'both' },
-    ];
-
-    function initMobile() {
-        state.isMobile = true;
-        state.mobilePageIndex = 0;
-
-        // Set initial mobile page visibility
-        updateMobileView();
-
-        // Add touch swipe (up/down for mobile)
-        var touchStartY = 0;
-
-        document.addEventListener('touchstart', function(e) {
-            if (state.isDetailView) return;
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', function(e) {
-            if (state.isAnimating || state.isDetailView) return;
-            var dy = touchStartY - e.changedTouches[0].clientY;
-            if (Math.abs(dy) > CONFIG.swipeThreshold) {
-                if (dy > 0) mobileTurnForward();
-                else mobileTurnBackward();
-            }
-        }, { passive: true });
-    }
-
-    function mobileTurnForward() {
-        if (state.mobilePageIndex >= MOBILE_PAGES.length - 1) return;
-        state.mobilePageIndex++;
-        loadMobilePage();
-    }
-
-    function mobileTurnBackward() {
-        if (state.mobilePageIndex <= 0) return;
-        state.mobilePageIndex--;
-        loadMobilePage();
-    }
-
-    function loadMobilePage() {
-        var page = MOBILE_PAGES[state.mobilePageIndex];
-        var spreadIndex = CONFIG.spreads.indexOf(page.spread);
-
-        if (spreadIndex !== state.currentSpread) {
-            state.currentSpread = spreadIndex;
-            loadSpread(page.spread, function() {
-                updateMobileView();
-                updateDots();
-                updateTurnZones();
-            });
-        } else {
-            updateMobileView();
-        }
-    }
-
-    function updateMobileView() {
-        if (!state.isMobile) return;
-
-        var pages = els.spread.querySelectorAll('.book__page');
-        var page = MOBILE_PAGES[state.mobilePageIndex];
-
-        for (var i = 0; i < pages.length; i++) {
-            pages[i].classList.remove('mobile-active', 'mobile-stacked');
-        }
-
-        if (page.side === 'left') {
-            var leftPage = els.spread.querySelector('.book__page--left');
-            if (leftPage) leftPage.classList.add('mobile-active');
-        } else if (page.side === 'right') {
-            var rightPage = els.spread.querySelector('.book__page--right');
-            if (rightPage) rightPage.classList.add('mobile-active');
-        } else {
-            // 'both' — show both stacked
-            for (var j = 0; j < pages.length; j++) {
-                pages[j].classList.add('mobile-active', 'mobile-stacked');
-            }
-        }
-    }
-
-    function onResize() {
-        var wasMobile = state.isMobile;
-        state.isMobile = window.innerWidth <= 480;
-
-        if (state.isMobile && !wasMobile) {
-            initMobile();
-        } else if (!state.isMobile && wasMobile) {
-            // Cleanup mobile classes
-            var pages = els.spread.querySelectorAll('.book__page');
-            for (var i = 0; i < pages.length; i++) {
-                pages[i].classList.remove('mobile-active', 'mobile-stacked');
-            }
-        }
     }
 
     /* ===========================
