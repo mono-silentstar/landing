@@ -13,8 +13,7 @@
         detailToSpread: { 'about': 1, 'cv': 2, 'diss': 3 },
         turnDuration: 500,
         zoomDuration: 550,
-        dragThreshold: 60,
-        dragFeedbackMax: 20,
+        swipeThreshold: 60,
         parallaxX: 4,
         parallaxY: 3,
         parallaxAngle: 1.5,
@@ -29,14 +28,10 @@
         totalSpreads: CONFIG.spreads.length,
         isAnimating: false,
         isDetailView: false,
-        isDragging: false,
-        dragStartX: 0,
-        dragCurrentX: 0,
         reducedMotion: false,
         isTouchDevice: false,
         isMobile: false,
         mobilePageIndex: 0,
-        suppressClick: false,
     };
 
     /* ===========================
@@ -89,7 +84,6 @@
         updateTurnZones();
         initClickHandlers();
         initKeyboard();
-        initDrag();
         initParallax();
         initHint();
 
@@ -197,10 +191,6 @@
     function initClickHandlers() {
         // Event delegation on the book cover
         els.cover.addEventListener('click', function(e) {
-            if (state.suppressClick) {
-                state.suppressClick = false;
-                return;
-            }
             if (state.isAnimating || state.isDetailView) return;
 
             dismissHint();
@@ -494,73 +484,6 @@
     }
 
     /* ===========================
-       DRAG HANDLING
-       =========================== */
-
-    function initDrag() {
-        if (!els.book) return;
-
-        els.book.addEventListener('mousedown', function(e) {
-            if (state.isAnimating || state.isDetailView) return;
-            if (e.target.closest('.turn-zone') || e.target.closest('.toc__link')) return;
-            state.isDragging = true;
-            state.dragStartX = e.clientX;
-            state.dragCurrentX = e.clientX;
-            state.suppressClick = false;
-            dismissHint();
-        });
-
-        window.addEventListener('mousemove', function(e) {
-            if (!state.isDragging) return;
-            state.dragCurrentX = e.clientX;
-            var dx = state.dragCurrentX - state.dragStartX;
-            var clamped = Math.max(-CONFIG.dragFeedbackMax,
-                Math.min(CONFIG.dragFeedbackMax, dx));
-            els.spread.style.transform = 'translateX(' + clamped + 'px)';
-            if (Math.abs(dx) > 10) {
-                state.suppressClick = true;
-            }
-        });
-
-        window.addEventListener('mouseup', function() {
-            if (!state.isDragging) return;
-            state.isDragging = false;
-            var dx = state.dragCurrentX - state.dragStartX;
-
-            // Reset visual feedback
-            els.spread.style.transition = 'transform 0.25s ease-out';
-            els.spread.style.transform = '';
-            setTimeout(function() {
-                els.spread.style.transition = '';
-            }, 250);
-
-            if (dx < -CONFIG.dragThreshold) {
-                turnForward();
-            } else if (dx > CONFIG.dragThreshold) {
-                turnBackward();
-            } else {
-                state.suppressClick = false;
-            }
-        });
-
-        // Touch drag
-        var touchStartX = 0;
-        els.book.addEventListener('touchstart', function(e) {
-            if (state.isAnimating || state.isDetailView) return;
-            touchStartX = e.touches[0].clientX;
-        }, { passive: true });
-
-        els.book.addEventListener('touchend', function(e) {
-            if (state.isAnimating || state.isDetailView) return;
-            var dx = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(dx) > CONFIG.dragThreshold) {
-                if (dx > 0) turnForward();
-                else turnBackward();
-            }
-        }, { passive: true });
-    }
-
-    /* ===========================
        PARALLAX
        =========================== */
 
@@ -568,7 +491,7 @@
         if (state.isTouchDevice || state.reducedMotion) return;
 
         window.addEventListener('mousemove', function(e) {
-            if (state.isDetailView || state.isDragging) return;
+            if (state.isDetailView) return;
             var cx = window.innerWidth / 2;
             var cy = window.innerHeight / 2;
             var dx = (e.clientX - cx) / cx;
@@ -659,7 +582,7 @@
         document.addEventListener('touchend', function(e) {
             if (state.isAnimating || state.isDetailView) return;
             var dy = touchStartY - e.changedTouches[0].clientY;
-            if (Math.abs(dy) > CONFIG.dragThreshold) {
+            if (Math.abs(dy) > CONFIG.swipeThreshold) {
                 if (dy > 0) mobileTurnForward();
                 else mobileTurnBackward();
             }

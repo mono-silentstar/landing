@@ -187,7 +187,6 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding-top: 10vh;
     perspective: var(--perspective);
     perspective-origin: center var(--persp-origin-y);
 }
@@ -1189,10 +1188,6 @@ html.dark .ambient-glow::after {
     :root {
         --book-angle: 25deg;
         --page-padding: 20px;
-    }
-
-    .scene {
-        padding-top: 5vh;
     }
 
     /* Hide spine */
