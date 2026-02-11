@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/mono/public_html/landing
+    - export DEPLOYPATH=/home/monomeuk/public_html/landing
     - /bin/mkdir -p $DEPLOYPATH/css
     - /bin/mkdir -p $DEPLOYPATH/js
     - /bin/mkdir -p $DEPLOYPATH/partials/spreads
