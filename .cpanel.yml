@@ -1,0 +1,19 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/mono/public_html/landing
+    - /bin/mkdir -p $DEPLOYPATH/css
+    - /bin/mkdir -p $DEPLOYPATH/js
+    - /bin/mkdir -p $DEPLOYPATH/partials/spreads
+    - /bin/mkdir -p $DEPLOYPATH/partials/details
+    - /bin/cp .htaccess $DEPLOYPATH/
+    - /bin/cp index.php $DEPLOYPATH/
+    - /bin/cp css/style.css $DEPLOYPATH/css/
+    - /bin/cp js/book.js $DEPLOYPATH/js/
+    - /bin/cp partials/spreads/cover.php $DEPLOYPATH/partials/spreads/
+    - /bin/cp partials/spreads/about.php $DEPLOYPATH/partials/spreads/
+    - /bin/cp partials/spreads/cv.php $DEPLOYPATH/partials/spreads/
+    - /bin/cp partials/spreads/diss.php $DEPLOYPATH/partials/spreads/
+    - /bin/cp partials/details/about.php $DEPLOYPATH/partials/details/
+    - /bin/cp partials/details/cv.php $DEPLOYPATH/partials/details/
+    - /bin/cp partials/details/diss.php $DEPLOYPATH/partials/details/
