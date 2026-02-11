@@ -56,6 +56,7 @@
         els.detailBack = document.getElementById('detail-back');
         els.toggle = document.getElementById('theme-toggle');
         els.dots = document.getElementById('spread-dots');
+        els.hint = document.getElementById('hint');
     }
 
     /* ===========================
@@ -90,6 +91,7 @@
         initKeyboard();
         initDrag();
         initParallax();
+        initHint();
 
         if (state.isMobile) {
             initMobile();
@@ -136,6 +138,7 @@
         els.html.classList.toggle('dark', dark);
         els.toggle.setAttribute('aria-checked', String(dark));
         localStorage.setItem('theme', dark ? 'dark' : 'light');
+        if (window.ambientParticles) window.ambientParticles.setTheme(dark);
     }
 
     /* ===========================
@@ -199,6 +202,8 @@
                 return;
             }
             if (state.isAnimating || state.isDetailView) return;
+
+            dismissHint();
 
             // Turn zone clicks
             var turnZone = e.target.closest('.turn-zone');
@@ -502,6 +507,7 @@
             state.dragStartX = e.clientX;
             state.dragCurrentX = e.clientX;
             state.suppressClick = false;
+            dismissHint();
         });
 
         window.addEventListener('mousemove', function(e) {
@@ -511,7 +517,7 @@
             var clamped = Math.max(-CONFIG.dragFeedbackMax,
                 Math.min(CONFIG.dragFeedbackMax, dx));
             els.spread.style.transform = 'translateX(' + clamped + 'px)';
-            if (Math.abs(dx) > 5) {
+            if (Math.abs(dx) > 10) {
                 state.suppressClick = true;
             }
         });
@@ -532,6 +538,8 @@
                 turnForward();
             } else if (dx > CONFIG.dragThreshold) {
                 turnBackward();
+            } else {
+                state.suppressClick = false;
             }
         });
 
@@ -588,6 +596,7 @@
                 case 'ArrowLeft':
                     if (!state.isDetailView) {
                         e.preventDefault();
+                        dismissHint();
                         turnBackward();
                     }
                     break;
@@ -595,6 +604,7 @@
                 case 'ArrowRight':
                     if (!state.isDetailView) {
                         e.preventDefault();
+                        dismissHint();
                         turnForward();
                     }
                     break;
@@ -721,6 +731,30 @@
                 pages[i].classList.remove('mobile-active', 'mobile-stacked');
             }
         }
+    }
+
+    /* ===========================
+       INTERACTION HINT
+       =========================== */
+
+    function initHint() {
+        if (!els.hint || !els.book) return;
+
+        // Already seen this session — hide immediately
+        if (sessionStorage.getItem('hintSeen')) {
+            els.hint.classList.add('hint--hidden');
+            return;
+        }
+
+        // Show hint and add pulsing class
+        els.book.classList.add('book--hinting');
+    }
+
+    function dismissHint() {
+        if (!els.hint || els.hint.classList.contains('hint--hidden')) return;
+        els.hint.classList.add('hint--hidden');
+        if (els.book) els.book.classList.remove('book--hinting');
+        sessionStorage.setItem('hintSeen', '1');
     }
 
     /* ===========================

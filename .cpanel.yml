@@ -10,6 +10,7 @@ deployment:
     - /bin/cp index.php $DEPLOYPATH/
     - /bin/cp css/style.css $DEPLOYPATH/css/
     - /bin/cp js/book.js $DEPLOYPATH/js/
+    - /bin/cp js/particles.js $DEPLOYPATH/js/
     - /bin/cp partials/spreads/cover.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/spreads/about.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/spreads/cv.php $DEPLOYPATH/partials/spreads/

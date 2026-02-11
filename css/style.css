@@ -958,7 +958,8 @@ html.dark .theme-toggle__icon--moon {
     pointer-events: none;
 }
 
-.scene--detail-active .spread-dots {
+.scene--detail-active .spread-dots,
+.scene--detail-active .hint {
     opacity: 0;
     pointer-events: none;
 }
@@ -983,7 +984,7 @@ html.dark .theme-toggle__icon--moon {
 
 /* Zoomable spread content */
 .page-content[data-detail] {
-    cursor: zoom-in;
+    cursor: pointer;
     transition: filter var(--hover-speed) ease;
 }
 
@@ -1002,7 +1003,125 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   21. REDUCED MOTION
+   21. INTERACTION HINT
+   ========================================================================== */
+
+.hint {
+    text-align: center;
+    color: var(--gold);
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-top: 1.2em;
+    z-index: 20;
+    transition: opacity 0.6s ease;
+}
+
+.hint--hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* ==========================================================================
+   22. HINTING PULSE (turn zones + zoomable content)
+   ========================================================================== */
+
+.book--hinting .turn-zone::after {
+    animation: pulse-gold 2s ease-in-out infinite;
+}
+
+@keyframes pulse-gold {
+    0%, 100% { opacity: 0.2; }
+    50%      { opacity: 0.6; }
+}
+
+.book--hinting .page-content[data-detail]::before {
+    animation: pulse-border 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+    0%, 100% { border-color: var(--gold); }
+    50%      { border-color: color-mix(in srgb, var(--gold), white 30%); }
+}
+
+
+/* ==========================================================================
+   23. AMBIENT GLOW
+   ========================================================================== */
+
+.ambient-glow {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0.3;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ambient-glow::before,
+.ambient-glow::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    will-change: transform;
+    transition: background var(--theme-speed) ease;
+}
+
+.ambient-glow::before {
+    width: 500px;
+    height: 500px;
+    top: -10%;
+    left: -5%;
+    background: radial-gradient(circle, rgba(255,200,120,0.6), rgba(255,170,100,0.2), transparent 70%);
+    animation: ambient-drift-1 20s ease-in-out infinite alternate;
+}
+
+.ambient-glow::after {
+    width: 400px;
+    height: 400px;
+    bottom: -5%;
+    right: -5%;
+    background: radial-gradient(circle, rgba(255,220,180,0.5), rgba(255,190,140,0.15), transparent 70%);
+    animation: ambient-drift-2 25s ease-in-out infinite alternate;
+}
+
+/* Dark mode: cool violet/blue aurora */
+html.dark .ambient-glow::before {
+    background: radial-gradient(circle, rgba(100,80,180,0.5), rgba(80,60,160,0.15), transparent 70%);
+}
+
+html.dark .ambient-glow::after {
+    background: radial-gradient(circle, rgba(60,100,200,0.4), rgba(40,80,180,0.1), transparent 70%);
+}
+
+@keyframes ambient-drift-1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(80px, 60px) scale(1.15); }
+}
+
+@keyframes ambient-drift-2 {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-60px, -40px) scale(1.1); }
+}
+
+
+/* ==========================================================================
+   24. AMBIENT CANVAS (particles)
+   ========================================================================== */
+
+#ambient-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+
+/* ==========================================================================
+   25. REDUCED MOTION
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1014,7 +1133,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   22. NO-JS DARK MODE FALLBACK
+   26. NO-JS DARK MODE FALLBACK
    ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
@@ -1037,7 +1156,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   23. TABLET (481px – 768px)
+   27. TABLET (481px – 768px)
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -1063,7 +1182,7 @@ html.dark .theme-toggle__icon--moon {
 
 
 /* ==========================================================================
-   24. MOBILE (≤480px) — Flipbook
+   28. MOBILE (≤480px) — Flipbook
    ========================================================================== */
 
 @media (max-width: 480px) {
