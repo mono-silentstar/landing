@@ -14,7 +14,9 @@ deployment:
     - /bin/cp partials/spreads/cover.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/spreads/about.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/spreads/cv.php $DEPLOYPATH/partials/spreads/
+    - /bin/cp partials/spreads/projects.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/spreads/diss.php $DEPLOYPATH/partials/spreads/
     - /bin/cp partials/details/about.php $DEPLOYPATH/partials/details/
     - /bin/cp partials/details/cv.php $DEPLOYPATH/partials/details/
+    - /bin/cp partials/details/projects.php $DEPLOYPATH/partials/details/
     - /bin/cp partials/details/diss.php $DEPLOYPATH/partials/details/

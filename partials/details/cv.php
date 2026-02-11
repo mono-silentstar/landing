@@ -1,82 +1,68 @@
 <article>
-    <h1 class="detail__title">Curriculum Vitae</h1>
-
-    <section>
-        <h2>Experience</h2>
-
-        <div class="detail-cv-entry">
-            <h3>Senior Developer</h3>
-            <p class="detail-cv-meta">Fictitious Corp &bull; 2022 &ndash; Present</p>
-            <p>Leading front-end architecture for client-facing products. Building
-            component libraries, establishing CSS conventions, and mentoring junior
-            developers who are smarter than me but don&rsquo;t know it yet.</p>
-            <ul>
-                <li>Rebuilt the design system from scratch &mdash; reduced CSS bundle by 40%</li>
-                <li>Introduced accessibility auditing into the CI pipeline</li>
-                <li>Maintained a &ldquo;zero !important&rdquo; rule (mostly)</li>
-            </ul>
-        </div>
-
-        <hr class="gold-rule">
-
-        <div class="detail-cv-entry">
-            <h3>Web Developer</h3>
-            <p class="detail-cv-meta">Made-Up Agency &bull; 2019 &ndash; 2022</p>
-            <p>Full-stack work across client projects. PHP backends, responsive
-            front-ends, and the occasional late-night deployment that went
-            suspiciously well.</p>
-            <ul>
-                <li>Delivered 30+ client projects on time and under budget</li>
-                <li>Built a custom CMS that clients could actually use without calling me</li>
-                <li>Won the internal &ldquo;least git conflicts&rdquo; award two years running</li>
-            </ul>
-        </div>
-
-        <hr class="gold-rule">
-
-        <div class="detail-cv-entry">
-            <h3>Junior Developer</h3>
-            <p class="detail-cv-meta">Startup That Pivoted &bull; 2017 &ndash; 2019</p>
-            <p>Learned more in two years than in three years of university. Wore
-            every hat. Survived three pivots and a rebrand.</p>
-            <ul>
-                <li>Built the MVP that secured Series A funding</li>
-                <li>Learned that &ldquo;move fast and break things&rdquo; mostly breaks things</li>
-                <li>First real experience with production databases (and production anxiety)</li>
-            </ul>
-        </div>
-    </section>
-
-    <hr class="gold-rule">
+    <h1 class="detail__title">Education &amp; Skills</h1>
 
     <section>
         <h2>Education</h2>
 
         <div class="detail-cv-entry">
-            <h3>MSc Computer Science</h3>
-            <p class="detail-cv-meta">University of Somewhere &bull; 2017</p>
-            <p>Specialised in human-computer interaction. Dissertation on digital
-            bookmark behaviour (yes, really &mdash; see the Dissertation section).</p>
+            <h3>MSci Computer Science</h3>
+            <p class="detail-cv-meta">Cardiff University &bull; 2022 &ndash; 2026</p>
+            <p>Relevant coursework:</p>
+            <ul>
+                <li><strong>Programming Paradigms</strong> &mdash; Object-oriented, functional,
+                and procedural approaches. Not just learning each one, but understanding
+                when each is the right choice.</li>
+                <li><strong>Object-Oriented Programming</strong> &mdash; Design patterns,
+                architecture, building systems that are maintainable rather than just functional.</li>
+                <li><strong>Graphics Programming</strong> &mdash; Low-level rendering with
+                OpenGL (JOGL). Building a 3D pipeline from scratch teaches you things no
+                framework ever will.</li>
+                <li><strong>Cyber Security and Risk Management</strong> &mdash; Thinking about
+                systems from the perspective of what can go wrong.</li>
+                <li><strong>Social Computing</strong> &mdash; How people interact with and
+                through technology. The human side of systems design.</li>
+            </ul>
         </div>
 
+        <hr class="gold-rule">
+
         <div class="detail-cv-entry">
-            <h3>BSc Information Systems</h3>
-            <p class="detail-cv-meta">College of Elsewhere &bull; 2015</p>
-            <p>Where I discovered that I liked building things more than
-            studying the theory of building things.</p>
+            <h3>A-Levels</h3>
+            <p class="detail-cv-meta">Chase Grammar School, Cannock &bull; 2020 &ndash; 2022</p>
+            <p>Music (A), Physics (B), Mathematics (B)</p>
+            <p>The Music A-Level isn&rsquo;t decorative. Composition is about structure, timing,
+            and knowing when something resolves. That thinking shows up in how I design
+            systems &mdash; there&rsquo;s a sense of &ldquo;does this feel complete&rdquo;
+            that goes beyond whether the tests pass.</p>
         </div>
     </section>
 
     <hr class="gold-rule">
 
     <section>
-        <h2>Tools &amp; Technologies</h2>
+        <h2>Technical Skills</h2>
+
         <ul>
-            <li><strong>Languages:</strong> HTML, CSS, JavaScript, PHP, SQL</li>
-            <li><strong>Frameworks:</strong> None by preference, several by necessity</li>
-            <li><strong>Tools:</strong> Git, Linux, Docker, Figma, Photoshop</li>
-            <li><strong>Methodologies:</strong> Accessible-first, progressive enhancement, semantic markup</li>
-            <li><strong>Editor:</strong> The one true editor (whichever one I&rsquo;m using today)</li>
+            <li><strong>Languages:</strong> Java, Python, JavaScript, PHP, C#, HTML/CSS</li>
+            <li><strong>Web Development:</strong> React, Laravel, HTMX, Spark. I&rsquo;ve built
+            with enough framework combinations to know that no single stack is the answer &mdash;
+            the right tools depend on what you&rsquo;re building and why.</li>
+            <li><strong>3D &amp; XR:</strong> Unity, Blender, OpenGL (JOGL), Three.js. From
+            modelling assets to building immersive VR experiences to rendering pipelines
+            written from scratch.</li>
+            <li><strong>Database &amp; Backend:</strong> MySQL, API design, schema architecture.
+            Building the parts of the system nobody sees but everyone relies on.</li>
+            <li><strong>Version Control:</strong> Git. Non-negotiable.</li>
         </ul>
+    </section>
+
+    <hr class="gold-rule">
+
+    <section>
+        <h2>What I&rsquo;m Learning</h2>
+        <p>I don&rsquo;t stop at what coursework requires. The portfolio you&rsquo;re looking
+        at was built because I wanted to understand how to present work properly. The D&amp;D
+        encounter planner I&rsquo;m building exists because the available tools didn&rsquo;t
+        work the way I think. I learn by building things I actually want to use.</p>
     </section>
 </article>

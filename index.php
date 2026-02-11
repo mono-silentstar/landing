@@ -17,7 +17,7 @@ $isHtmx = isset($_SERVER['HTTP_HX_REQUEST']);
 if ($isHtmx && preg_match('#^/(spread|detail)/(\w+)$#', $uri, $m)) {
     $type = $m[1] === 'spread' ? 'spreads' : 'details';
     $name = $m[2];
-    $allowed = ['cover', 'about', 'cv', 'diss'];
+    $allowed = ['cover', 'about', 'cv', 'projects', 'diss'];
     if (!in_array($name, $allowed, true)) {
         http_response_code(404);
         echo 'Not found';
@@ -38,7 +38,8 @@ $sections = [
     '/'              => ['view' => 'book',   'spread' => 'cover'],
     '/about'         => ['view' => 'detail', 'section' => 'about',  'spreadIndex' => 1],
     '/cv'            => ['view' => 'detail', 'section' => 'cv',     'spreadIndex' => 2],
-    '/dissertation'  => ['view' => 'detail', 'section' => 'diss',   'spreadIndex' => 3],
+    '/projects'      => ['view' => 'detail', 'section' => 'projects', 'spreadIndex' => 3],
+    '/dissertation'  => ['view' => 'detail', 'section' => 'diss',     'spreadIndex' => 4],
 ];
 
 $route = $sections[$uri] ?? null;

@@ -5,28 +5,21 @@
     <div class="page-content" data-spread="about" data-detail="/detail/about">
         <h2 class="page-title">About</h2>
         <hr class="gold-rule">
-        <p>Designer, developer, maker of things.</p>
-        <p>I build for the web with care and curiosity. Most of my work lives
-        at the intersection of design and engineering &mdash; the place where
-        pixels meet logic and neither gets to win every argument.</p>
-        <p>When I&rsquo;m not at a screen, I&rsquo;m probably tangled in yarn
-        or rolling down a street on eight wheels.</p>
+        <p>Final-year MSci Computer Science, Cardiff University.</p>
+        <p>I like building things that hold together &mdash; clean architecture,
+        intentional design, systems that work because they were thought through,
+        not hacked into shape.</p>
+        <p>I care about the structure of what I make as much as whether it runs.</p>
     </div>
 </div>
 <div class="book__page book__page--right">
     <div class="page-content" data-spread="about" data-detail="/detail/about">
-        <h2 class="page-title">Skills &amp; Interests</h2>
+        <h2 class="page-title">Interests</h2>
         <hr class="gold-rule">
-        <ul class="skill-list">
-            <li>Front-end development <em>(the fun kind)</em></li>
-            <li>PHP <em>(unapologetic)</em></li>
-            <li>CSS architecture <em>(yes, it&rsquo;s real engineering)</em></li>
-            <li>Crochet <em>(advanced threat level)</em></li>
-            <li>Rollerblading <em>(poorly, but with conviction)</em></li>
-            <li>Naming variables on the first try <em>(aspirational)</em></li>
-            <li>Making granny squares <em>(mass production)</em></li>
-            <li>Yoyoing <em>(walk the dog, sleep, that&rsquo;s about it)</em></li>
-        </ul>
+        <p>When I&rsquo;m not writing code, I&rsquo;m designing D&amp;D worlds,
+        planning crochet projects, or reworking a cooking system.</p>
+        <p>Everything I touch tends to become a framework eventually.</p>
+        <p>I&rsquo;m looking for work where I get to build things properly.</p>
     </div>
     <div class="turn-zone turn-zone--next"
          role="button" tabindex="0" aria-label="Next page">

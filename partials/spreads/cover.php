@@ -20,16 +20,23 @@
             </li>
             <li class="toc__entry">
                 <a href="<?= $basePath ?>/cv" class="toc__link" data-goto-spread="2">
-                    <span class="toc__title">Curriculum Vitae</span>
+                    <span class="toc__title">Education &amp; Skills</span>
                     <span class="toc__dots"></span>
                     <span class="toc__number">II</span>
                 </a>
             </li>
             <li class="toc__entry">
-                <a href="<?= $basePath ?>/dissertation" class="toc__link" data-goto-spread="3">
-                    <span class="toc__title">Dissertation</span>
+                <a href="<?= $basePath ?>/projects" class="toc__link" data-goto-spread="3">
+                    <span class="toc__title">Projects</span>
                     <span class="toc__dots"></span>
                     <span class="toc__number">III</span>
+                </a>
+            </li>
+            <li class="toc__entry">
+                <a href="<?= $basePath ?>/dissertation" class="toc__link" data-goto-spread="4">
+                    <span class="toc__title">Dissertation</span>
+                    <span class="toc__dots"></span>
+                    <span class="toc__number">IV</span>
                 </a>
             </li>
         </ul>

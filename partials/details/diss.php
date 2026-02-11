@@ -2,77 +2,92 @@
     <h1 class="detail__title">Dissertation</h1>
 
     <section>
-        <h2>On the Persistence of Bookmarks in Digital Spaces</h2>
-        <p class="detail-cv-meta"><em>Submitted in partial fulfilment of the requirements for
-        the degree of Master of Science, 2017</em></p>
+        <h2>My Virtual Horse: An AR Experience</h2>
+        <p class="detail-cv-meta"><em>MSci Dissertation Project &bull; Cardiff University</em></p>
 
-        <h3>Abstract</h3>
-        <p>This thesis investigates how users organise, abandon, and rediscover
-        saved content across web platforms. Through mixed-methods research combining
-        quantitative browser data analysis with qualitative semi-structured interviews
-        (n=24), it maps the lifecycle of the digital bookmark from hopeful curation
-        to quiet neglect.</p>
-
-        <p>The study finds that bookmarking behaviour is driven more by aspiration
-        than by utility &mdash; users save content they intend to return to but rarely do,
-        creating personal archives that function as portraits of unrealised intent
-        rather than useful reference libraries.</p>
+        <h3>The Brief</h3>
+        <p>A Welsh horse club wanted to explore whether XR technology could help people
+        experience their horses remotely. The long-term vision was a full interactive
+        experience; the realistic first step was a proof of concept &mdash; an AR environment
+        where a user wearing a Meta Quest headset could see a realistic horse model in
+        their physical space.</p>
     </section>
 
     <hr class="gold-rule">
 
     <section>
-        <h2>Key Findings</h2>
+        <h3>What I Built</h3>
+        <p><strong>A realistic 3D horse model</strong> of a specific Welsh Pony and Cob,
+        modelled in Blender using quad-based topology. I visited the client&rsquo;s stables
+        to photograph the actual horse from multiple angles, then used those reference photos
+        to trace, build, and texture the model. The topology was designed with animation in
+        mind &mdash; denser mesh around the face and ears where horses are most expressive,
+        cleaner flow along the joints for natural deformation.</p>
 
-        <ul>
-            <li><strong>73% of bookmarks are never revisited</strong> after the first
-            week of saving. The median bookmark lifespan (from creation to last access)
-            is 3.2 days.</li>
+        <p><strong>A textured, rigged, animated model.</strong> UV unwrapped, texture-painted
+        using the reference photos as stencil overlays, rigged using Rigify (after comparing
+        it against a hand-built skeleton), and animated with a looping idle animation &mdash;
+        ear twitches, head movement, the small things that make a static model feel alive.</p>
 
-            <li><strong>Folder structures mirror aspirational self-image</strong> more
-            than actual behaviour. Users create categories like &ldquo;To Read&rdquo;,
-            &ldquo;Research&rdquo;, and &ldquo;Inspiration&rdquo; that reflect who they
-            want to be, not how they actually use the web.</li>
-
-            <li><strong>The &ldquo;Read Later&rdquo; folder is, functionally, a graveyard.</strong>
-            Items saved to explicit &ldquo;read later&rdquo; collections had the lowest
-            revisitation rate of any category (8.3%).</li>
-
-            <li><strong>Users report guilt</strong> about unread bookmarks at rates
-            comparable to unread books on a physical shelf. 67% of participants used
-            the word &ldquo;should&rdquo; when discussing their saved items.</li>
-
-            <li><strong>Rediscovery is serendipitous, not systematic.</strong> When
-            users do return to old bookmarks, it&rsquo;s usually by accident while
-            searching for something else. No participant reported a regular
-            &ldquo;bookmark review&rdquo; habit.</li>
-        </ul>
+        <p><strong>An AR environment in Unity</strong> configured for Meta Quest passthrough.
+        This meant stripping out Unity&rsquo;s default post-processing (volumetric lighting,
+        HDR), setting up XR-specific camera tracking, plane detection, and anchor management,
+        and solving the various import conflicts between Blender&rsquo;s export format and
+        Unity&rsquo;s expectations.</p>
     </section>
 
     <hr class="gold-rule">
 
     <section>
-        <h2>Methodology</h2>
-        <p>Participants exported their browser bookmark data (anonymised) and
-        participated in 45-minute interviews about their saving and retrieval
-        habits. Data was analysed using thematic analysis alongside descriptive
-        statistics on bookmark creation, access frequency, and folder organisation.</p>
+        <h3>What Didn&rsquo;t Work</h3>
+        <p><strong>Hair.</strong> Blender&rsquo;s hair particle system doesn&rsquo;t export
+        cleanly to Unity. The strand-based approach that works for pre-rendered 3D simply
+        isn&rsquo;t practical for real-time AR on mobile hardware.</p>
 
-        <p>The study was conducted under ethical approval and all personally
-        identifiable URLs were stripped during the anonymisation process. Which
-        is a shame, because some of those bookmarks were genuinely fascinating.</p>
+        <p><strong>Fur.</strong> Shell-method fur shaders designed for Unity&rsquo;s Universal
+        Render Pipeline partially worked &mdash; but only rendered for one eye. AR requires
+        stereo rendering, and the shader wasn&rsquo;t written to handle that. The horse
+        appeared fully furred in the left eye and invisible in the right. This is a genuine
+        unsolved edge case in AR development &mdash; most fur shaders assume mono rendering.</p>
+
+        <p><strong>Device deployment.</strong> The project runs correctly in Unity&rsquo;s
+        Play Mode on the Meta Quest via developer mode. However, building directly to the
+        headset as a standalone app failed &mdash; Unity wouldn&rsquo;t recognise the Quest
+        as a build target. The AR experience works, but only tethered to a development
+        environment.</p>
     </section>
 
     <hr class="gold-rule">
 
     <section>
-        <h2>Significance</h2>
-        <p>The findings contribute to our understanding of personal information
-        management and have implications for the design of browser interfaces,
-        read-later applications, and content recommendation systems. If
-        &ldquo;Read Later&rdquo; means &ldquo;Never&rdquo;, perhaps we should
-        design for that honestly.</p>
+        <h3>What I Learned</h3>
+        <p><strong>Modelling organic forms is a different discipline than modelling objects.</strong>
+        A cube is simple shapes. A horse is continuous curves, flowing topology, and every edge
+        decision affects how the model deforms when animated. I iterated the model multiple times,
+        and each version taught me something the previous one couldn&rsquo;t.</p>
 
-        <p><em>The full paper contains fewer jokes than this page. Probably.</em></p>
+        <p><strong>Preparation matters more than skill.</strong> The reference photos from the
+        stable visit were the single most valuable asset in the project. Without them, I&rsquo;d
+        have been guessing at proportions and textures. With them, I could paint directly from
+        reality.</p>
+
+        <p><strong>Knowing what doesn&rsquo;t work is as valuable as knowing what does.</strong>
+        The hair and fur failures aren&rsquo;t just failures &mdash; they&rsquo;re documentation
+        of where the current toolchain breaks down for AR. That&rsquo;s useful information for
+        anyone attempting similar work.</p>
+
+        <p><strong>Client work requires managing expectations.</strong> I&rsquo;m naturally
+        ambitious, and I had to learn to say &ldquo;that&rsquo;s outside the scope&rdquo; without
+        it feeling like giving up. The client wanted a full interactive experience. What I could
+        deliver was a strong foundation and an honest assessment of what&rsquo;s possible now
+        versus what needs more development.</p>
+    </section>
+
+    <hr class="gold-rule">
+
+    <section>
+        <h3>Technologies</h3>
+        <p>Blender (modelling, texturing, rigging, animation), Unity (AR environment, XR integration),
+        C# (Unity scripting), Meta Quest (hardware target), Meta XR SDK (passthrough, tracking)</p>
     </section>
 </article>

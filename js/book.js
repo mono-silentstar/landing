@@ -8,7 +8,7 @@
     var BASE = (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.basePath) || '';
 
     var CONFIG = {
-        spreads: ['cover', 'about', 'cv', 'diss'],
+        spreads: ['cover', 'about', 'cv', 'projects', 'diss'],
         turnDuration: 500,
         zoomDuration: 550,
         zoomOutDuration: 450,
